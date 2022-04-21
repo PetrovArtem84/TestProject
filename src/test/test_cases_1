@@ -1,0 +1,101 @@
+
+create user, check created:
+test data:
+username: random string 1 to 100 symbols
+email: random string 1 to 100 symbols + "@gmail.com"
+password: random string 1 to 100 symbols
+
+1- User gets current list of users by users/get endpoint
+2- User creates an account by users/create endpoint using test data
+3- User validates response
+   -- success - true
+   -- message - User Successully created
+   (note word Successfully misses f symbol, probably bug needs to be created and test case fixed)
+   -- details contain same username, and email.
+   -- details contain password not empty
+   -- details contain created_at and updated_at at UTC
+   -- details contain id - long value
+4- User gets list of users by users/get endpoint
+   -- list of returned users increased by 1
+   -- created user is in list
+   -- user details matches with created user data in post response
+
+
+cannot create duplicate user name:
+test data:
+username: random string 1 to 100 symbols
+email: random string 1 to 100 symbols + "@gmail.com"
+password: random string 1 to 100 symbols
+
+1- User gets current list of users by users/get endpoint
+2- User creates an account by users/create endpoint using test data
+3- User validates response
+   -- success - true
+   -- message - User Successully created
+   (note word Successfully misses f symbol, probably bug needs to be created and test case fixed)
+   -- details contain same username, and email.
+   -- details contain password not empty
+   -- details contain created_at and updated_at at UTC
+   -- details contain id - long value
+4- User gets list of users by users/get endpoint
+   -- list of returned users increased by 1
+   -- created user is in list
+   -- user details matches with created user data in post response
+5- User sends post to users/create same username and password, different emeail
+   -- an error received, code 400
+   --     "success": false,
+   -- "message": [ "This username is taken. Try another."]
+6- User gets list of users
+   -- no changes from step 4
+
+
+cannot create duplicate email.
+same steps as duplicate username, but username is being changed
+expecting -
+{
+    "success": false,
+    "message": [
+        "Email already exists"
+    ]
+}
+
+
+username should not be empty
+username: empty
+email: random string
+password: random string
+
+{
+    "success": false,
+    "message": [
+        "A username is required"
+    ]
+}
+
+username should not be empty
+username: random string
+email: empty
+password: random string
+{
+    "success": false,
+    "message": [
+        "An Email is required"
+    ]
+}
+
+username should not be empty
+username: random string
+email: random string
+password: empty
+{
+    "success": false,
+    "message": [
+        "A password for the user"
+    ]
+}
+
+cyrillic values in username, password, email
+special symbols like \n in username, password, email
+white space in username, password, email
+
+long strings (100k symbols) in username, password, email

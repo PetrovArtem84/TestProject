@@ -1,3 +1,5 @@
+import entities.PostUserResponseEntity;
+import entities.UserDataEntity;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
@@ -9,6 +11,9 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Random;
+
+import static consts.ResponseCodes.BAD_REQUEST;
+import static consts.ResponseCodes.SUCCESS;
 import static org.hamcrest.Matchers.*;
 
 public class UsersTest {
@@ -27,17 +32,21 @@ public class UsersTest {
 
     @BeforeMethod
     public void beforeMethod(){
-        username = getRandomLengthString(1, 10000);
-        email = getRandomLengthString(1, 10000) + "@gmail.com";
-        password = getRandomLengthString(1, 10000);
+        username = getRandomLengthString(1, 100);
+        email = getRandomLengthString(1, 100) + "@gmail.com";
+        password = getRandomLengthString(1, 100);
     }
 
     @Test
     public void testUserCreatedAndFoundInGet(){
+//        var currentDateTime = LocalDateTime.now();
         var createdUserDetails = createUser(username, email, password);
-        //todo date validations should be added
+        var createdAtTime = createdUserDetails.getParsedCreated_at();
+        var updatedAtTime = createdUserDetails.getParsedUpdated_at();
+//        Period.between(currentDateTime, createdAtTime)
+
         var usersList = getUsersFromService();
-        UserData2 userInGetResponse = getUserFromListById(usersList, createdUserDetails.getId());
+        UserDataEntity userInGetResponse = getUserFromListById(usersList, createdUserDetails.getId());
 
         Assert.assertNotNull(userInGetResponse, "Expected created user in get response and found by id");
         Assert.assertEquals(usersList.size(), usersCount, "users count mismatch, expected increased by 1");
@@ -52,10 +61,10 @@ public class UsersTest {
     public void testUserSameNameIsNotCreatedTwice(){
         var new_email = getRandomLengthString(1, 100);
         var createdUserDetails = createUser(username, email, password);
-        createUserExpectError(username, new_email, password, 400, "This username is taken. Try another.");
+        createUserExpectError(username, new_email, password, BAD_REQUEST, "This username is taken. Try another.");
 
         var usersList = getUsersFromService();
-        UserData2 userInGetResponse = getUserFromListById(usersList, createdUserDetails.getId());
+        UserDataEntity userInGetResponse = getUserFromListById(usersList, createdUserDetails.getId());
 
         Assert.assertNotNull(userInGetResponse, "Expected created user in get response and found by id");
         Assert.assertEquals(usersList.size(), usersCount, "users count mismatch, expected increased by 1");
@@ -72,36 +81,38 @@ public class UsersTest {
                 true, true);
     }
 
-    private List<UserData2> getUsersFromService(){
+    private List<UserDataEntity> getUsersFromService(){
         return RestAssured.given().get("/user/get")
-                .then().assertThat().statusCode(200)
-                .extract().body().jsonPath().getList("", UserData2.class);
+                .then().assertThat().statusCode(SUCCESS)
+                .extract().body().jsonPath().getList("", UserDataEntity.class);
     }
 
-    private UserData2 getUserFromListById(List<UserData2> users, Long UserId){
-        UserData2 userInGetResponse = null;
-        for (UserData2 userData2 : users) {
-            if (userData2.getId().equals(UserId)) {
-                userInGetResponse = userData2;
+    private UserDataEntity getUserFromListById(List<UserDataEntity> users, Long UserId){
+        UserDataEntity userInGetResponse = null;
+        for (UserDataEntity userDataEntity : users) {
+            if (userDataEntity.getId().equals(UserId)) {
+                userInGetResponse = userDataEntity;
                 break;
             }
         }
         return userInGetResponse;
     }
 
-    private UserData2 createUser(String userName, String email, String password){
+    private UserDataEntity createUser(String userName, String email, String password){
         RequestSpecification httpRequest = RestAssured.given()
                 .formParam("username", userName)
                 .formParam("email", email)
                 .formParam("password", password);
 
         ValidatableResponse response = httpRequest.post("/user/create")
-                .then().assertThat().statusCode(200)
+                .then().assertThat().statusCode(SUCCESS)
                 .body("success", equalTo(true))
                 .body("message", equalTo("User Successully created"))
                 .body("details.email", equalTo(email))
                 .body("details.username", equalTo(userName))
-                .body("details.password", notNullValue());
+                .body("details.password", notNullValue())
+                .body("details.created_at", notNullValue())
+                .body("details.updated_at", notNullValue());
 
         PostUserResponseEntity responseDetails =
                 response.extract().as(PostUserResponseEntity.class);

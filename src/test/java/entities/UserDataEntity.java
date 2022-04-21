@@ -1,4 +1,12 @@
-public class UserData2 {
+package entities;
+
+import org.apache.http.client.utils.DateUtils;
+
+import java.util.Date;
+
+import static consts.DateFormat.STRING_FORMAT;
+
+public class UserDataEntity {
     private String username;
     private String email;
     private String password;
@@ -34,12 +42,20 @@ public class UserData2 {
         return created_at;
     }
 
+    public Date getParsedCreated_at() {
+        return DateUtils.parseDate(created_at, STRING_FORMAT);
+    }
+
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
 
     public String getUpdated_at() {
         return updated_at;
+    }
+
+    public Date getParsedUpdated_at() {
+        return DateUtils.parseDate(created_at, STRING_FORMAT);
     }
 
     public void setUpdated_at(String updated_at) {

@@ -1,6 +1,8 @@
+package entities;
+
 public class PostUserResponseEntity {
     private boolean success;
-    private UserData2 details;
+    private UserDataEntity details;
     private String message;
 
     public boolean isSuccess() {
@@ -11,11 +13,11 @@ public class PostUserResponseEntity {
         this.success = success;
     }
 
-    public UserData2 getDetails() {
+    public UserDataEntity getDetails() {
         return details;
     }
 
-    public void setDetails(UserData2 details) {
+    public void setDetails(UserDataEntity details) {
         this.details = details;
     }
 
