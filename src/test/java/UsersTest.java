@@ -21,8 +21,6 @@ public class UsersTest {
     @BeforeClass
     public void setup() {
         usersClient = new UsersClient();
-        RestAssured.baseURI = "http://3.145.97.83";
-        RestAssured.port = 3333;
         usersCount = usersClient.getUsersFromService().size();
     }
 
