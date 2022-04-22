@@ -142,3 +142,4 @@ same case with email
 same with password(what if there are several users with same password?)
 
 created_at, updated_at filter by date
+parameters combinations also could be checked, but as it is not documented - should be discussed with the team
