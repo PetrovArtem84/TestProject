@@ -139,6 +139,6 @@ http://3.145.97.83:3333/user/get?username=value1 (or created user data)
 ]
 
 same case with email
-same with password(what id there are several users with same password?)
+same with password(what if there are several users with same password?)
 
 created_at, updated_at filter by date
