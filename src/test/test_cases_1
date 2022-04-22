@@ -24,7 +24,7 @@ password: random string 1 to 100 symbols
 cannot create duplicate user name:
 test data:
 username: random string 1 to 100 symbols
-email: random string 1 to 100 symbols + "@gmail.com"
+email: random string 1 to 100 symbols
 password: random string 1 to 100 symbols
 
 1- User gets current list of users by users/get endpoint
@@ -72,6 +72,7 @@ password: random string
     ]
 }
 
+
 username should not be empty
 username: random string
 email: empty
@@ -83,6 +84,7 @@ password: random string
     ]
 }
 
+
 username should not be empty
 username: random string
 email: random string
@@ -93,6 +95,7 @@ password: empty
         "A password for the user"
     ]
 }
+
 
 cyrillic values in username, password, email
 special symbols like \n in username, password, email
