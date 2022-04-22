@@ -73,7 +73,7 @@ password: random string
 }
 
 
-username should not be empty
+email should not be empty
 username: random string
 email: empty
 password: random string
@@ -85,7 +85,7 @@ password: random string
 }
 
 
-username should not be empty
+password should not be empty
 username: random string
 email: random string
 password: empty
@@ -102,3 +102,43 @@ special symbols like \n in username, password, email
 white space in username, password, email
 
 long strings (100k symbols) in username, password, email
+Corner cases for username, password, email(1 symbol(if there is possibility to clean records), 10k symbols)
+
+
+get api.
+if possible clean records.
+
+getting zero records.
+create user - get users(one record)
+create 2 users - get users, both users present
+create 100000 - get users, correct amount displayed
+
+not documented
+http://3.145.97.83:3333/user/get?id=1(or created user data)
+[
+    {
+        "id": 1,
+        "username": "value1",
+        "email": "dadiv@wisebits.com",
+        "password": "$2a$10$tSBp.NwFQemCnc3HoEpWReydnP1tdoq9fISag944uLAK8aYod4exO",
+        "created_at": "2021-12-07 13:48:22",
+        "updated_at": "2021-12-07 13:48:22"
+    }
+]
+
+http://3.145.97.83:3333/user/get?username=value1 (or created user data)
+[
+    {
+        "id": 1,
+        "username": "value1",
+        "email": "dadiv@wisebits.com",
+        "password": "$2a$10$tSBp.NwFQemCnc3HoEpWReydnP1tdoq9fISag944uLAK8aYod4exO",
+        "created_at": "2021-12-07 13:48:22",
+        "updated_at": "2021-12-07 13:48:22"
+    }
+]
+
+same case with email
+same with password(what id there are several users with same password?)
+
+created_at, updated_at filter by date
