@@ -96,6 +96,9 @@ password: empty
     ]
 }
 
+username\password\email are white space (three cases)
+username\email are duplicates but with white spaces in the beginning, ending
+(exmaple like: "apetrov", " apetrov", "apetrov ")
 
 cyrillic values in username, password, email
 special symbols like \n in username, password, email
